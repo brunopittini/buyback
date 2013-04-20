@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Textbook Buyback Comparison</title>
+    <link type="text/css" href="site.css" rel="stylesheet" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-2.1.0.js"></script>
+    <script type="text/javascript" src="site.js"></script>
+</head>
+<body>
+<header>
+    
+</header>
+<section id="content">
+    <form data-bind="submit: search">
+        <script type="text/javascript">
+        var numInput = '<input type="number" pattern="[0-9]*" size="13" placeholder="Enter an ISBN" data-bind="value: inputIsbn">';
+        var textInput = '<input type="text" size="13" placeholder="Enter an ISBN" data-bind="value: inputIsbn">';
+        if (/Android|iPhone|iPad|iPod|BlackBerry|webOS/i.test(navigator.userAgent)) {
+           document.write(numInput);
+        } else {
+            document.write(textInput);
+        }
+        </script>
+        <input type="submit" value="Search">
+    </form>
+    <table id="comparison" data-bind="visible: books().length > 0">
+        <thead>
+            <tr data-bind="foreach: headers">
+                <th data-bind="text: $data"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- ko foreach: books -->
+            <tr>
+                <td data-bind="text: isbn"></td>
+                <td data-bind="text: title"></td>
+                <!-- ko foreach: providers -->
+                <td>$<span data-bind="text: price"></span></td>
+                <!-- /ko -->
+            </tr>
+            <!-- /ko -->
+        </tbody>
+    </table>
+</section>
+<footer>
+    
+</footer>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16890062-3']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>
