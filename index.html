@@ -37,6 +37,7 @@
         <!-- ko foreach: books -->
         <div class="result">
             <span class="isbn" data-bind="text: isbn"></span>
+            <span class="loading" data-bind="visible: isLoading">Loading...</span>
             <span class="title" data-bind="text: title"></span>
             <table>
                 <tr data-bind="foreach: providers">

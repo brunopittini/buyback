@@ -56,16 +56,19 @@ var Book = function (isbn) {
     self.title = ko.observable('');
     self.author = ko.observable('');
     self.edition = ko.observable('');
-    
     self.providers = ko.observableArray([]);
+    self.isLoading = ko.observable(false);
     
     self.fetchData = function () {
+        self.isLoading(true);
         $.get('get.php', { 'isbn': self.isbn() }, function (data) {
             data = $.parseJSON(data);
             self.title(data.Title);
             self.providers(ko.utils.arrayMap(data.Providers, function (item) {
                 return new Provider(item);
             }));
+        }).then(function () {
+            self.isLoading(false);
         });
     }
     
