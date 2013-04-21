@@ -10,17 +10,17 @@ if (isset($_GET['isbn'])) {
         $data['Isbn'] = $ISBN;
         $data['Title'] = $google['Title'];
         $data['Providers'] = array();
-        $data['Providers'][0] = GetNeebo($ISBN);
-        $data['Providers'][1] = GetFollett($ISBN);
+        $data['Providers'][0] = GetFollett($ISBN);
+        $data['Providers'][1] = GetNeebo($ISBN);
         $data['Providers'][2] = GetAmazon($ISBN);
         
-        if (!$data['Title']) $data['Title'] = $data['Providers'][0]['Title'];
         if (!$data['Title']) $data['Title'] = $data['Providers'][1]['Title'];
+        if (!$data['Title']) $data['Title'] = $data['Providers'][0]['Title'];
         if (!$data['Title']) $data['Title'] = '(Not Found)';
         
         // provider name replacement for UNL
-        $data['Providers'][0]['Provider'] = 'Nebraska Bookstore';
-        $data['Providers'][1]['Provider'] = 'University Bookstore';
+        $data['Providers'][0]['Provider'] = 'University Bookstore';
+        $data['Providers'][1]['Provider'] = 'Nebraska Bookstore';
         $data['Providers'][2]['Provider'] = 'Amazon.com Buyback';
         
         echo json_encode($data);

@@ -58,6 +58,9 @@ body {
 .result table tr td {
     width: 33%;
 }
+.result table tr td.best {
+    background-color: rgb(231, 250, 231);
+}
 
 form input[type="text"],
 form input[type="number"] {

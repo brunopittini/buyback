@@ -69,7 +69,24 @@ var Book = function (isbn) {
             }));
         }).then(function () {
             self.isLoading(false);
+            self.findBestProvider();
         });
+    }
+    
+    self.findBestProvider = function () {
+        var providers = self.providers();
+        var best = null;
+        var bestPrice = 0;
+        for (var i = 0; i < providers.length; i++) {
+            var price = parseFloat(providers[i].price());
+            if (price > bestPrice) {
+                best = providers[i];
+                bestPrice = price;
+            }
+        }
+        if (best) {
+            best.isBest(true);
+        }
     }
     
     self.fetchData();
@@ -91,6 +108,7 @@ var Provider = function (data) {
         }
         return '$' + (price.substr(-3) == ".00" ? price.substr(0,price.length-3) : price);
     });
+    self.isBest = ko.observable(false);
 }
 
 var buybackVM = new BuybackViewModel();

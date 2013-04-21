@@ -26,11 +26,11 @@
             </script>
             <input type="submit" value="Search">
         </form>
-        <!--
+        <!---->
         <form data-bind="submit: Utils.test">
             <input type="submit" value="t">
         </form>
-        -->
+        <!---->
     </div>
     <!-- ko if: books().length > 0 -->
     <div id="results">
@@ -41,7 +41,7 @@
             <span class="title" data-bind="text: title"></span>
             <table>
                 <tr data-bind="foreach: providers">
-                    <td>
+                    <td data-bind="css: { best: isBest() }">
                         <span data-bind="text: provider"></span><br/>
                         <span data-bind="text: displayPrice"></span>
                     </td>
