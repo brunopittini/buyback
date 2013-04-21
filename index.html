@@ -13,36 +13,43 @@
     
 </header>
 <section id="content">
-    <form data-bind="submit: search">
-        <script type="text/javascript">
-        var numInput = '<input type="number" pattern="[0-9]*" size="13" placeholder="Enter an ISBN" data-bind="value: inputIsbn">';
-        var textInput = '<input type="text" size="13" placeholder="Enter an ISBN" data-bind="value: inputIsbn">';
-        if (/Android|iPhone|iPad|iPod|BlackBerry|webOS/i.test(navigator.userAgent)) {
-           document.write(numInput);
-        } else {
-            document.write(textInput);
-        }
-        </script>
-        <input type="submit" value="Search">
-    </form>
-    <table id="comparison" data-bind="visible: books().length > 0">
-        <thead>
-            <tr data-bind="foreach: headers">
-                <th data-bind="text: $data"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- ko foreach: books -->
-            <tr>
-                <td data-bind="text: isbn"></td>
-                <td data-bind="text: title"></td>
-                <!-- ko foreach: providers -->
-                <td>$<span data-bind="text: price"></span></td>
-                <!-- /ko -->
-            </tr>
-            <!-- /ko -->
-        </tbody>
-    </table>
+    <div id="search">
+        <form data-bind="submit: search">
+            <script type="text/javascript">
+            var numInput = '<input type="number" pattern="[0-9]*" size="13" placeholder="Enter an ISBN" data-bind="value: inputIsbn">';
+            var textInput = '<input type="text" size="13" placeholder="Enter an ISBN" data-bind="value: inputIsbn">';
+            if (/Android|iPhone|iPad|iPod|BlackBerry|webOS/i.test(navigator.userAgent)) {
+               document.write(numInput);
+            } else {
+                document.write(textInput);
+            }
+            </script>
+            <input type="submit" value="Search">
+        </form>
+        <!--
+        <form data-bind="submit: Utils.test">
+            <input type="submit" value="t">
+        </form>
+        -->
+    </div>
+    <!-- ko if: books().length > 0 -->
+    <div id="results">
+        <!-- ko foreach: books -->
+        <div class="result">
+            <span class="isbn" data-bind="text: isbn"></span>
+            <span class="title" data-bind="text: title"></span>
+            <table>
+                <tr data-bind="foreach: providers">
+                    <td>
+                        <span data-bind="text: provider"></span><br/>
+                        <span data-bind="text: displayPrice"></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- /ko -->
+    </div>
+    <!-- /ko -->
 </section>
 <footer>
     

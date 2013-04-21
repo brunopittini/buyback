@@ -5,7 +5,24 @@ var headers = ['ISBN', 'Title', 'Neebo (Nebraska Bookstore)', 'Follett (Universi
 
 var Utils = {
     cleanIsbn: function (isbn) {
-        return $.trim(isbn.replace(/-/g, ''));
+        return isbn.replace(/[^0-9]/g, '');
+    },
+    isNullOrEmpty: function (s) {
+        return (s == null || s == undefined || s == '');
+    },
+    test: function () {
+        buybackVM.addBook('9780262033848');
+        buybackVM.addBook('9780805091182');
+        buybackVM.addBook('9781118226155');
+        buybackVM.addBook('9780738205373');
+        buybackVM.addBook('9780071749275');
+        buybackVM.addBook('9781111773397');
+        buybackVM.addBook('9780446563048');
+        buybackVM.addBook('0020303955');
+        buybackVM.addBook('9781845116545');
+        buybackVM.addBook('');
+        buybackVM.addBook('');
+        buybackVM.addBook('');
     }
 }
 
@@ -21,7 +38,9 @@ var BuybackViewModel = function () {
     self.books = ko.observableArray([]);
     
     self.addBook = function (isbn) {
-        self.books.push(new Book(isbn));
+        if (!Utils.isNullOrEmpty(isbn)) {
+            self.books.push(new Book(isbn));
+        }
     }
     
     self.search = function () {
@@ -42,13 +61,11 @@ var Book = function (isbn) {
     
     self.fetchData = function () {
         $.get('get.php', { 'isbn': self.isbn() }, function (data) {
-            self.providers(ko.utils.arrayMap($.parseJSON(data), function (item) {
+            data = $.parseJSON(data);
+            self.title(data.Title);
+            self.providers(ko.utils.arrayMap(data.Providers, function (item) {
                 return new Provider(item);
             }));
-            self.title(self.providers()[0].name);
-            if (self.title() == "Sellback not available on this item" && self.providers()[2].name != "") {
-                self.title(self.providers()[2].name);
-            }
         });
     }
     
@@ -59,15 +76,22 @@ var Provider = function (data) {
     var self = this;
     
     self.provider = ko.observable(data.Provider);
-    self.name = data.Name;
+    self.title = data.Title;
     self.author = data.Author;
     self.edition = data.Edition;
     self.isbn = data.Isbn;
     self.price = ko.observable(data.Price);
+    self.displayPrice = ko.computed(function () {
+        var price = self.price();
+        if (price.length > 1 && price.indexOf('.') == price.length-2) {
+            price = price + "0";
+        }
+        return '$' + (price.substr(-3) == ".00" ? price.substr(0,price.length-3) : price);
+    });
 }
 
 var buybackVM = new BuybackViewModel();
 
 $(document).ready(function () {
-    ko.applyBindings(buybackVM, $('#content')[0]);
+    ko.applyBindings(buybackVM, $('body')[0]);
 })

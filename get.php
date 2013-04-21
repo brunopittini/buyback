@@ -4,10 +4,25 @@ ini_set('display_errors','Off');
 if (isset($_GET['isbn'])) {
     $ISBN = removeDashes(trim($_GET['isbn']));
     if (isValidIsbnLength($ISBN)) {
+        $google = GetGoogle($ISBN);
+        
         $data = array();
-        $data[0] = GetNeebo($ISBN);
-        $data[1] = GetFollett($ISBN);
-        $data[2] = GetAmazon($ISBN);
+        $data['Isbn'] = $ISBN;
+        $data['Title'] = $google['Title'];
+        $data['Providers'] = array();
+        $data['Providers'][0] = GetNeebo($ISBN);
+        $data['Providers'][1] = GetFollett($ISBN);
+        $data['Providers'][2] = GetAmazon($ISBN);
+        
+        if (!$data['Title']) $data['Title'] = $data['Providers'][0]['Title'];
+        if (!$data['Title']) $data['Title'] = $data['Providers'][1]['Title'];
+        if (!$data['Title']) $data['Title'] = '(Not Found)';
+        
+        // provider name replacement for UNL
+        $data['Providers'][0]['Provider'] = 'Nebraska Bookstore';
+        $data['Providers'][1]['Provider'] = 'University Bookstore';
+        $data['Providers'][2]['Provider'] = 'Amazon.com Buyback';
+        
         echo json_encode($data);
     } else {
         echo 'Invalid ISBN.';
@@ -35,7 +50,7 @@ function removeDashes($str) {
 function createEmptyResponse($provider, $price) {
     $data = array(
         'Provider' => $provider,
-        'Name' => '',
+        'Title' => '',
         'Author' => '',
         'Edition' => '',
         'Isbn' => '',
@@ -65,7 +80,7 @@ function GetNeebo($ISBN) {
         if (count($response) > 0) {
             $data = array(
                 'Provider' => 'Neebo',
-                'Name' => $response[0]['Name'],
+                'Title' => $response[0]['Name'],
                 'Author' => $response[0]['Author'],
                 'Edition' => $response[0]['Edition'],
                 'Isbn' => $response[0]['Isbn'],
@@ -133,7 +148,7 @@ function GetFollett($ISBN) {
             
             $data = array(
                 'Provider' => 'Follett',
-                'Name' => $title,
+                'Title' => $title,
                 'Author' => $author,
                 'Edition' => $edition,
                 'Isbn' => $isbn,
@@ -179,7 +194,7 @@ function GetAmazon($ISBN) {
         
             $data = array(
                 'Provider' => 'Amazon',
-                'Name' => $title,
+                'Title' => $title,
             //    'Author' => $author,
             //    'Edition' => $edition,
             //    'Isbn' => $isbn,
@@ -191,6 +206,48 @@ function GetAmazon($ISBN) {
     } catch (HttpException $ex) {
         //echo $ex;
         $data = createEmptyResponse('Amazon', 'error');
+    }
+    
+    return $data;
+}
+
+function GetGoogle($ISBN) {
+    $request = new HttpRequest("https://www.googleapis.com/books/v1/volumes?q=isbn:$ISBN", HttpRequest::METH_GET);
+    $request->setHeaders(array(
+        'Host' => 'www.googleapis.com'
+    ));
+    
+    try {
+        $response = json_decode($request->send()->getBody());
+        if (is_null($response)){
+            return null;
+        }
+        
+        if ($response->totalItems == 1) {
+            $item = $response->items[0];
+            $info = $item->volumeInfo;
+            
+            if (!is_null($info)) {
+                $data = array(
+                    'Title' => $info->title,
+                    'Subtitle' => $info->subtitle,
+                    'Author' => $info->authors[0]
+                );
+            } else {
+                $data = array(
+                    'Title' => "",
+                    'Subtitle' => "",
+                    'Author' => ""
+                );
+            }
+        }
+    } catch (Exception $ex) {
+        //echo $ex;
+        $data = array(
+            'Title' => "",
+            'Subtitle' => "",
+            'Author' => ""
+        );
     }
     
     return $data;
