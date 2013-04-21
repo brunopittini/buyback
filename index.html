@@ -2,7 +2,8 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Textbook Buyback Comparison</title>
+    <title>UNL Textbook Buyback Comparison</title>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:600,400" rel="stylesheet" type="text/css">
     <link type="text/css" href="site.css" rel="stylesheet" />
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-2.1.0.js"></script>
@@ -13,7 +14,12 @@
     
 </header>
 <section id="content">
-    <div id="search">
+    <div id="welcome" data-bind="if: books().length == 0">
+        <span>UNL students, get the most money for your textbooks!</span><br/>
+        To begin, search for an ISBN. The ISBN can usually be found near the barcode on the back cover of a book.
+    </div>
+    
+    <div id="search" data-bind="css: { 'welcome-search': books().length == 0 }">
         <form data-bind="submit: search">
             <script type="text/javascript">
             var numInput = '<input type="number" pattern="[0-9]*" size="13" placeholder="Enter an ISBN" data-bind="value: inputIsbn">';
@@ -32,6 +38,7 @@
         </form>
         -->
     </div>
+    
     <!-- ko if: books().length > 0 -->
     <div id="results">
         <!-- ko foreach: books -->

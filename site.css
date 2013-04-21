@@ -6,8 +6,32 @@ body {
     margin: 0;
     padding: 0;
     background: #efeeef;
-    font-family: "Segoe UI",Verdana,Helvetica,Sans-Serif;
+    font-family: "Open Sans",Verdana,Helvetica,Sans-Serif;
     font-size: 0.85em;
+}
+
+input[type="text"],
+input[type="number"] {
+    border: 1px solid #a2a2a2;
+    color: #333;
+    font-size: 1.2em;
+    margin: 5px 0 6px 0;
+    padding: 6px;
+}
+
+input[type="submit"] {
+    background-color: #d3dce0;
+    border: 1px solid #787878;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: 400;
+    padding: 6px 10px;
+}
+input[type="text"]:focus {
+    background: #fafafa;
+}
+input:focus {
+    outline: none !important;
 }
 
 #content {
@@ -16,12 +40,38 @@ body {
     width: 750px;
 }
 
+#welcome {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: 150px;
+    text-align: center;
+    font-size: 1.2em;
+    color: #666;
+    padding: 0 10px;
+}
+#welcome > span:first-child {
+    color: #111;
+    font-size: 1.8em;
+}
+
 #search {
     text-align: center;
     padding: 5px 0;
 }
-#search > form {
+#search form {
     display: inline-block;
+}
+.welcome-search {
+    position: absolute;
+    top: 80px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: 50px;
+    width: 100%;
 }
 
 .result {
@@ -41,7 +91,7 @@ body {
 }
 .result .title {
     display: block;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 1.1em;
     text-transform: uppercase;
 }
@@ -62,25 +112,6 @@ body {
     background-color: rgb(231, 250, 231);
 }
 
-form input[type="text"],
-form input[type="number"] {
-    border: 1px solid #a2a2a2;
-    color: #333;
-    font-size: 1.3em;
-    margin: 5px 0 6px 0;
-    padding: 6px;
-    width: 160px;
-}
-
-form input[type="submit"] {
-    background-color: #d3dce0;
-    border: 1px solid #787878;
-    cursor: pointer;
-    font-size: 1.3em;
-    font-weight: 500;
-    padding: 6px 10px;
-}
-
 @media all and (max-width: 780px) {
     #content {
         margin: 10px auto;
@@ -89,12 +120,23 @@ form input[type="submit"] {
         border: none;
         background: none;
     }
+    #welcome > span:first-child {
+        font-size: 1.3em;
+    }
+    #welcome {
+        top: 50px !important;
+    }
     #search {
         position: fixed;
         width: 100%;
         top: 0;
         left: 0;
         background: #efeeef;
+    }
+    .welcome-search {
+        position: fixed;
+        top: 0;
+        margin: 0;
     }
     #results {
         margin-top: 65px;
