@@ -119,11 +119,11 @@ footer {
     bottom: 0;
     right: 0;
     left: 0;
-    margin: auto;
     text-align: center;
-    font-size: 0.9em;
+    font-size: 0.85em;
     font-style: italic;
-    margin: 15px 0;
+    margin: 12px 4px;
+    line-height: 1;
 }
 .footer-search {
     position: relative;
@@ -142,6 +142,7 @@ footer {
     }
     #welcome {
         top: 50px !important;
+        bottom: 50px !important;
     }
     #search {
         position: fixed;
