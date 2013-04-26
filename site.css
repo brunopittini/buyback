@@ -44,6 +44,8 @@ input:focus {
     position: absolute;
     top: 0;
     bottom: 0;
+    left: 0;
+    right: 0;
     margin: auto;
     height: 150px;
     text-align: center;
@@ -110,6 +112,21 @@ input:focus {
 }
 .result table tr td.best {
     background-color: rgb(231, 250, 231);
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+    text-align: center;
+    font-size: 0.9em;
+    font-style: italic;
+    margin: 15px 0;
+}
+.footer-search {
+    position: relative;
 }
 
 @media all and (max-width: 780px) {

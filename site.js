@@ -1,8 +1,4 @@
-
-//////// BEGIN KNOCKOUT CODE ////////
-
-var headers = ['ISBN', 'Title', 'Neebo (Nebraska Bookstore)', 'Follett (University Bookstore)', 'Amazon'];
-
+/**** UNL Textbook Buyback ****/
 var Utils = {
     cleanIsbn: function (isbn) {
         return isbn.replace(/[^0-9]/g, '');
