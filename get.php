@@ -191,24 +191,22 @@ function GetFollett($ISBN) {
         libxml_use_internal_errors(true);
         $doc = new DOMDocument();
         $doc->loadHTML(str_replace('&nbsp;', ' ', $response));
-        $content = $doc->getElementById('content');
-        $form = $content->getElementsByTagName('form')->item(0);
-        $tr = $form->getElementsByTagName('tr')->item(3);
-        $td = $tr->getElementsByTagName('td')->item(1);
-        if (!is_null($td)) {
-            $info = $td->getElementsByTagName('strong')->item(0);
-            $node = $info->firstChild;
-            list( ,$title) = explode(':  ', trim($node->wholeText), 2);
+        $xpath = new DOMXPath($doc);
+        $results = $xpath->query("//*[@class='result-information']");
+        if ($results->length > 0) {
+            $result = $results->item(0);
+            $node = $result->firstChild->nextSibling;
+            $title = $node->firstChild->wholeText;
             $node = $node->nextSibling->nextSibling;
-            list( ,$edition) = explode(':  ', trim($node->wholeText), 2);
+            list( ,$author) = explode(': ', trim($node->firstChild->wholeText), 2);
             $node = $node->nextSibling->nextSibling;
-            list( ,$author) = explode(':  ', trim($node->wholeText), 2);
+            list( ,$edition) = explode(': ', trim($node->firstChild->wholeText), 2);
             $node = $node->nextSibling->nextSibling;
-            //list( ,$publisher) = explode(':  ', trim($node->wholeText), 2);
+            list( ,$publisher) = explode(': ', trim($node->firstChild->wholeText), 2);
             $node = $node->nextSibling->nextSibling;
-            list( ,$isbn) = explode(':  ', trim($node->wholeText), 2);
-            $node = $node->nextSibling->nextSibling->nextSibling;
-            list( ,$price) = explode(':  ', trim($node->wholeText), 2);
+            list( ,$isbn) = explode(': ', trim($node->firstChild->wholeText), 2);
+            $node = $node->nextSibling->nextSibling->firstChild->nextSibling;
+            list( ,$price) = explode(': ', trim($node->firstChild->wholeText), 2);
             
             $data = array(
                 'Provider' => 'Follett',
